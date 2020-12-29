@@ -1,4 +1,4 @@
-package proyectoBD.mx.com;
+package app.mx.com;
 
 import java.sql.*;
 
