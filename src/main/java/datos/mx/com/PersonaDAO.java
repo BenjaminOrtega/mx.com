@@ -8,7 +8,7 @@ import java.util.*;
 
 public class PersonaDAO {
 	private static final String SQL_SELECT = "SELECT id_persona, nombre, apellido, email, telefono FROM Test.Persona";
-	
+	private static final String SQL_INSERT = "INSERT INTO Persona (nombre, apellido,email, telefono) values (?, ?, ?, ?)";
 	public List<Persona> seleccionar(){
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -36,9 +36,9 @@ public class PersonaDAO {
 			e.printStackTrace(System.out);
 		}finally {
 			try {
-				Conexion.close(conn);
-				Conexion.close(stmt);
-				Conexion.close(stmt);
+				close(conn);
+				close(stmt);
+				close(rs);
 						
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -46,10 +46,38 @@ public class PersonaDAO {
 			}
 			
 		}
-		
-		
-		
 		return personas;
 	}//metodo seleccionar
+	
+	public int Insertar(Persona persona) {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		int personas = 0;
+		
+		try {
+			conn = getConnection();
+			stmt = conn.prepareStatement(SQL_INSERT);
+			
+			stmt.setString(1, persona.getNombre());
+			stmt.setString(2, persona.getApellido());
+			stmt.setString(3, persona.getEmail());
+			stmt.setString(4, persona.getTelefono());
+			personas = stmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace(System.out);
+		}
+		finally {
+			try {
+				close(conn);
+				close(stmt);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace(System.out);
+			}
+		}
+		
+		return personas;
+	}//metodo para insertar
 
 }
