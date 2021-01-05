@@ -9,6 +9,9 @@ import java.util.*;
 public class PersonaDAO {
 	private static final String SQL_SELECT = "SELECT id_persona, nombre, apellido, email, telefono FROM Test.Persona";
 	private static final String SQL_INSERT = "INSERT INTO Persona (nombre, apellido,email, telefono) values (?, ?, ?, ?)";
+	private static final String SQL_UPDATE = "UPDATE Persona  set nombre = ?, apellido = ?, email = ?, telefono = ? WHERE id_persona = ?";
+	private static final String SQL_DELETE = "DELETE FROM Persona WHERE id_persona = ?";
+	
 	public List<Persona> seleccionar(){
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -80,4 +83,60 @@ public class PersonaDAO {
 		return personas;
 	}//metodo para insertar
 
+	public int updatePerson(Persona persona) {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		int personas = 0;
+		
+		try {
+			conn = getConnection();
+			stmt = conn.prepareStatement(SQL_UPDATE);
+			
+			stmt.setString(1, persona.getNombre());
+			stmt.setString(2, persona.getApellido());
+			stmt.setString(3, persona.getEmail());
+			stmt.setString(4, persona.getTelefono());
+			
+			stmt.setInt(5, persona.getIdPersona());
+			
+			personas = stmt.executeUpdate();
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace(System.out);
+		}finally {
+			try {
+				close(conn);
+				close(stmt);
+			} catch (Exception e2) {
+				// TODO: handle exception
+			}
+		}		 
+		return personas;
+	}//metodo para actualizar una Persona
+	
+	public int personDelete(Persona persona) {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		int personas = 0;
+		try {
+			conn = getConnection();
+			stmt = conn.prepareStatement(SQL_DELETE);
+			stmt.setInt(1, persona.getIdPersona());
+			personas = stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace(System.out);
+		}finally {
+			try {
+				close(conn);
+				close(stmt);
+			} catch (SQLException e2) {
+				e2.printStackTrace(System.out);
+			}
+		}
+		
+		
+		return personas;
+	}
+	
 }
