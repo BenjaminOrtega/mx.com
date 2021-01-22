@@ -7,12 +7,18 @@ import java.sql.*;
 import java.util.*;
 
 public class PersonaDAO {
-	private static final String SQL_SELECT = "SELECT id_persona, nombre, apellido, email, telefono FROM Test.Persona";
-	private static final String SQL_INSERT = "INSERT INTO Persona (nombre, apellido,email, telefono) values (?, ?, ?, ?)";
-	private static final String SQL_UPDATE = "UPDATE Persona  set nombre = ?, apellido = ?, email = ?, telefono = ? WHERE id_persona = ?";
-	private static final String SQL_DELETE = "DELETE FROM Persona WHERE id_persona = ?";
 	
-	public List<Persona> seleccionar(){
+	private Connection conexionTransaccional = null;
+	private static final String SQL_SELECT = "SELECT id_persona, nombre, apellido, email, telefono FROM persona";
+	private static final String SQL_INSERT = "INSERT INTO persona (nombre, apellido,email, telefono) values (?, ?, ?, ?)";
+	private static final String SQL_UPDATE = "UPDATE persona  set nombre = ?, apellido = ?, email = ?, telefono = ? WHERE id_persona = ?";
+	private static final String SQL_DELETE = "DELETE FROM persona WHERE id_persona = ?";
+	
+	public PersonaDAO (Connection conexionTransaccional) {
+		this.conexionTransaccional = conexionTransaccional;
+	}
+	
+	public List<Persona> seleccionar() throws SQLException{
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
@@ -20,7 +26,7 @@ public class PersonaDAO {
 		List<Persona> personas = new ArrayList<>();
 		
 		try {
-			conn = getConnection();
+			conn = this.conexionTransaccional != null ? this.conexionTransaccional : getConnection();
 			stmt = conn.prepareStatement(SQL_SELECT);
 			rs = stmt.executeQuery();
 			while(rs.next()) {
@@ -35,11 +41,11 @@ public class PersonaDAO {
 				personas.add(persona);
 				
 			}
-		} catch (SQLException e) {
-			e.printStackTrace(System.out);
-		}finally {
+		} finally {
 			try {
-				close(conn);
+				if(this.conexionTransaccional == null) {
+					close(conn);
+				}
 				close(stmt);
 				close(rs);
 						
@@ -52,13 +58,13 @@ public class PersonaDAO {
 		return personas;
 	}//metodo seleccionar
 	
-	public int Insertar(Persona persona) {
+	public int Insertar(Persona persona) throws SQLException {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		int personas = 0;
 		
 		try {
-			conn = getConnection();
+			conn = this.conexionTransaccional != null ? this.conexionTransaccional : getConnection();
 			stmt = conn.prepareStatement(SQL_INSERT);
 			
 			stmt.setString(1, persona.getNombre());
@@ -66,13 +72,11 @@ public class PersonaDAO {
 			stmt.setString(3, persona.getEmail());
 			stmt.setString(4, persona.getTelefono());
 			personas = stmt.executeUpdate();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace(System.out);
-		}
-		finally {
+		} finally {
 			try {
-				close(conn);
+				if(this.conexionTransaccional == null) {
+					close(conn);
+				}
 				close(stmt);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -83,13 +87,13 @@ public class PersonaDAO {
 		return personas;
 	}//metodo para insertar
 
-	public int updatePerson(Persona persona) {
+	public int updatePerson(Persona persona) throws SQLException {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		int personas = 0;
 		
 		try {
-			conn = getConnection();
+			conn = this.conexionTransaccional != null ? this.conexionTransaccional : getConnection();
 			stmt = conn.prepareStatement(SQL_UPDATE);
 			
 			stmt.setString(1, persona.getNombre());
@@ -102,11 +106,11 @@ public class PersonaDAO {
 			personas = stmt.executeUpdate();
 			
 			
-		} catch (SQLException e) {
-			e.printStackTrace(System.out);
-		}finally {
+		} finally {
 			try {
-				close(conn);
+				if(this.conexionTransaccional == null) {
+					close(conn);
+				}
 				close(stmt);
 			} catch (Exception e2) {
 				// TODO: handle exception
@@ -115,20 +119,20 @@ public class PersonaDAO {
 		return personas;
 	}//metodo para actualizar una Persona
 	
-	public int personDelete(Persona persona) {
+	public int personDelete(Persona persona) throws SQLException {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		int personas = 0;
 		try {
-			conn = getConnection();
+			conn = this.conexionTransaccional != null ? this.conexionTransaccional : getConnection();
 			stmt = conn.prepareStatement(SQL_DELETE);
 			stmt.setInt(1, persona.getIdPersona());
 			personas = stmt.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace(System.out);
-		}finally {
+		} finally {
 			try {
-				close(conn);
+				if(this.conexionTransaccional == null) {
+					close(conn);
+				}
 				close(stmt);
 			} catch (SQLException e2) {
 				e2.printStackTrace(System.out);
