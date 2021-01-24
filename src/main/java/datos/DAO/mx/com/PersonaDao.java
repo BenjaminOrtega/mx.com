@@ -1,4 +1,4 @@
-package datos.mx.com;
+package datos.DAO.mx.com;
 
 import java.sql.SQLException;
 import java.util.List;

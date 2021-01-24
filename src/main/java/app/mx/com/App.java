@@ -3,10 +3,13 @@ package app.mx.com;
 import java.sql.*;
 import java.util.List;
 
+import datos.DAO.mx.com.PersonaDao;
+import datos.DAO.mx.com.UsuarioDAO;
 import datos.mx.com.Conexion;
-import datos.mx.com.PersonaDao;
 import datos.mx.com.PersonaDaoJDBC;
+import datos.mx.com.UsuarioDaoJDBC;
 import domain.mx.com.PersonaDTO;
+import domain.mx.com.UsuarioDTO;
 
 /**
  * Hello world!
@@ -23,11 +26,18 @@ public class App
 				conexion.setAutoCommit(false);
 			}//validaccion ara que el autocomit se desacctive
 			PersonaDao personaDao = new PersonaDaoJDBC(conexion);
+			UsuarioDAO usaurioDao = new UsuarioDaoJDBC(conexion);
 			
 			List<PersonaDTO> personas = personaDao.seleccionar();
 			
+			List<UsuarioDTO> usuarios = usaurioDao.listar(); 
+			
 			personas.forEach(persona -> {
 				System.out.println(persona);
+			});
+			System.out.println("-----------------------------");
+			usuarios.forEach(users-> {
+				System.out.println(users);
 			});
 			
 			

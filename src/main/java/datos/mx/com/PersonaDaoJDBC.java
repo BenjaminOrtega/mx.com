@@ -6,6 +6,8 @@ import static datos.mx.com.Conexion.*;
 import java.sql.*;
 import java.util.*;
 
+import datos.DAO.mx.com.PersonaDao;
+
 public class PersonaDaoJDBC implements PersonaDao{
 	
 	private Connection conexionTransaccional = null;
