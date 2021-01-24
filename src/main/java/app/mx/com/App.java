@@ -1,10 +1,12 @@
 package app.mx.com;
 
 import java.sql.*;
+import java.util.List;
 
 import datos.mx.com.Conexion;
-import datos.mx.com.PersonaDAO;
-import domain.mx.com.Persona;
+import datos.mx.com.PersonaDao;
+import datos.mx.com.PersonaDaoJDBC;
+import domain.mx.com.PersonaDTO;
 
 /**
  * Hello world!
@@ -20,22 +22,15 @@ public class App
 			if(conexion.getAutoCommit()) {
 				conexion.setAutoCommit(false);
 			}//validaccion ara que el autocomit se desacctive
-			PersonaDAO accionPrsonaDAO = new PersonaDAO(conexion);
+			PersonaDao personaDao = new PersonaDaoJDBC(conexion);
 			
-			Persona persona1 = new Persona();
-			persona1.setNombre("Staryuki");
-			persona1.setApellido("Ni idea");
-			persona1.setEmail("cabeson@gmail.com");
-			persona1.setTelefono("564565656");
+			List<PersonaDTO> personas = personaDao.seleccionar();
 			
-			accionPrsonaDAO.Insertar(persona1);
+			personas.forEach(persona -> {
+				System.out.println(persona);
+			});
 			
-			Persona persona2 = new Persona(2,"Sashagrey",
-											 "gamerPro",
-											 "gamerpro@gmail.com",
-											 "5678657845");
 			
-			accionPrsonaDAO.updatePerson(persona2);
 			conexion.commit();//se ejecuta el commit para que las sentecnias que afectan la BD no sean procesadas cuando una de estas falle
 			System.out.println("Se guardo el commit");
 		} catch (SQLException e) {

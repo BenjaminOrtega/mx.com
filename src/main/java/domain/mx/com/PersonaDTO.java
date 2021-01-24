@@ -1,20 +1,20 @@
 package domain.mx.com;
 
-public class Persona {
+public class PersonaDTO {
 	private Integer idPersona;
 	private String nombre;
 	private String apellido;
 	private String email;
 	private String telefono;
 	
-	public Persona() {
+	public PersonaDTO() {
 	}
 
-	public Persona(Integer idPersona) {
+	public PersonaDTO(Integer idPersona) {
 		this.idPersona = idPersona;
 	}
 
-	public Persona(Integer idPersona, String nombre, String apellido, String email, String telefono) {
+	public PersonaDTO(Integer idPersona, String nombre, String apellido, String email, String telefono) {
 		this.idPersona = idPersona;
 		this.nombre = nombre;
 		this.apellido = apellido;

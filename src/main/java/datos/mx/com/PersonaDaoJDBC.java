@@ -1,12 +1,12 @@
 package datos.mx.com;
 
-import domain.mx.com.Persona;
+import domain.mx.com.PersonaDTO;
 import static datos.mx.com.Conexion.*;
 
 import java.sql.*;
 import java.util.*;
 
-public class PersonaDAO {
+public class PersonaDaoJDBC implements PersonaDao{
 	
 	private Connection conexionTransaccional = null;
 	private static final String SQL_SELECT = "SELECT id_persona, nombre, apellido, email, telefono FROM persona";
@@ -14,16 +14,16 @@ public class PersonaDAO {
 	private static final String SQL_UPDATE = "UPDATE persona  set nombre = ?, apellido = ?, email = ?, telefono = ? WHERE id_persona = ?";
 	private static final String SQL_DELETE = "DELETE FROM persona WHERE id_persona = ?";
 	
-	public PersonaDAO (Connection conexionTransaccional) {
+	public PersonaDaoJDBC (Connection conexionTransaccional) {
 		this.conexionTransaccional = conexionTransaccional;
 	}
 	
-	public List<Persona> seleccionar() throws SQLException{
+	public List<PersonaDTO> seleccionar() throws SQLException{
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		Persona persona = null;
-		List<Persona> personas = new ArrayList<>();
+		PersonaDTO persona = null;
+		List<PersonaDTO> personas = new ArrayList<>();
 		
 		try {
 			conn = this.conexionTransaccional != null ? this.conexionTransaccional : getConnection();
@@ -37,7 +37,7 @@ public class PersonaDAO {
 				String email = rs.getString("email");
 				String telefono = rs.getString("telefono");
 				
-				persona = new Persona(idPersona,nombre,apellido,email,telefono);
+				persona = new PersonaDTO(idPersona,nombre,apellido,email,telefono);
 				personas.add(persona);
 				
 			}
@@ -58,7 +58,7 @@ public class PersonaDAO {
 		return personas;
 	}//metodo seleccionar
 	
-	public int Insertar(Persona persona) throws SQLException {
+	public Integer Insertar(PersonaDTO persona) throws SQLException {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		int personas = 0;
@@ -87,7 +87,7 @@ public class PersonaDAO {
 		return personas;
 	}//metodo para insertar
 
-	public int updatePerson(Persona persona) throws SQLException {
+	public Integer updatePerson(PersonaDTO persona) throws SQLException {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		int personas = 0;
@@ -119,7 +119,7 @@ public class PersonaDAO {
 		return personas;
 	}//metodo para actualizar una Persona
 	
-	public int personDelete(Persona persona) throws SQLException {
+	public Integer personDelete(PersonaDTO persona) throws SQLException {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		int personas = 0;
@@ -142,5 +142,6 @@ public class PersonaDAO {
 		
 		return personas;
 	}
+
 	
 }
